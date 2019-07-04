@@ -1,6 +1,7 @@
 package ru.skillbranch.devintensive.extensions
 
 import ru.skillbranch.devintensive.extensions.TimeUnits.*
+import java.lang.IllegalArgumentException
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.math.absoluteValue
@@ -9,7 +10,15 @@ enum class TimeUnits(val size: Long) {
     SECOND(1000L),
     MINUTE(60 * SECOND.size),
     HOUR(60 * MINUTE.size),
-    DAY(24 * HOUR.size)
+    DAY(24 * HOUR.size);
+
+    fun plural(number: Int): String = when {
+        this == SECOND -> num2str(number.toLong(), secondsList)
+        this == MINUTE -> num2str(number.toLong(), minutesList)
+        this == HOUR -> num2str(number.toLong(), hoursList)
+        this == DAY -> num2str(number.toLong(), daysList)
+        else -> throw IllegalArgumentException("Wrong input param")
+    }
 }
 
 val Int.sec get() = this * SECOND.size
@@ -21,6 +30,7 @@ val Long.asMin get() = this.absoluteValue / MINUTE.size
 val Long.asHour get() = this.absoluteValue / HOUR.size
 val Long.asDay get() = this.absoluteValue / DAY.size
 
+private val secondsList: List<String> = listOf("секунду", "секунды", "секунд")
 private val minutesList: List<String> = listOf("минуту", "минуты", "минут")
 private val hoursList: List<String> = listOf("час", "часа", "часов")
 private val daysList: List<String> = listOf("день", "дня", "дней")
