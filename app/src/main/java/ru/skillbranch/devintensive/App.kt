@@ -2,6 +2,8 @@ package ru.skillbranch.devintensive
 
 import android.app.Application
 import android.content.Context
+import androidx.appcompat.app.AppCompatDelegate
+import ru.skillbranch.devintensive.repositories.PreferenceRepository
 
 class App : Application() {
     companion object {
@@ -18,6 +20,8 @@ class App : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        //TODO
+        PreferenceRepository.getAppTheme().also {
+            AppCompatDelegate.setDefaultNightMode(it)
+        }
     }
 }

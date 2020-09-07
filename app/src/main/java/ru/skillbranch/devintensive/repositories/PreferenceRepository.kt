@@ -2,6 +2,7 @@ package ru.skillbranch.devintensive.repositories
 
 import android.content.SharedPreferences
 import android.preference.PreferenceManager
+import androidx.appcompat.app.AppCompatDelegate
 import ru.skillbranch.devintensive.App
 import ru.skillbranch.devintensive.models.Profile
 
@@ -13,11 +14,19 @@ object PreferenceRepository {
     private const val REPOSITORY = "REPOSITORY"
     private const val RATING = "RATING"
     private const val RESPECT = "RESPECT"
+    private const val APP_THEME = "APP_THEME"
 
     private val prefs: SharedPreferences by lazy {
         val ctx = App.applicationContext()
         PreferenceManager.getDefaultSharedPreferences(ctx)
     }
+
+    fun saveAppTheme(theme: Int) {
+        putValue(APP_THEME to theme)
+    }
+
+    fun getAppTheme(): Int = prefs.getInt(APP_THEME, AppCompatDelegate.MODE_NIGHT_NO)
+
 
     fun getProfile(): Profile = Profile(
             prefs.getString(FIRST_NAME, "")!!,
@@ -33,8 +42,9 @@ object PreferenceRepository {
             putValue(FIRST_NAME to firstName)
             putValue(LAST_NAME to lastName)
             putValue(ABOUT to about)
-            putValue(RATING to repository)
-            putValue(RESPECT to rating)
+            putValue(REPOSITORY to repository)
+            putValue(RATING to rating)
+            putValue(RESPECT to respect)
         }
     }
 
@@ -48,5 +58,6 @@ object PreferenceRepository {
             is Float -> putFloat(key, value)
             else -> error("Only primitive types put prefs")
         }
+        this.commit()
     }
 }
